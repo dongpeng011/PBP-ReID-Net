@@ -1,0 +1,51 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper below."
+title: PBP-ReID
+abstract: >-
+  Reference implementation of "Efficient Body-Prior Token Anchoring and
+  Part-Aware Global-Local Fusion for Multi-Scene Person Re-Identification":
+  a ViT-Base person re-identification model with parameter-free body-prior token
+  anchoring (EASA), hierarchical part-relation attention (HPRA) and
+  global-local additive fusion (GAL).
+type: software
+license: MIT
+version: 1.0.0
+date-released: "2026-11-09"
+keywords:
+  - person re-identification
+  - part-aware representation
+  - vision transformer
+  - body prior
+  - multi-scene robustness
+  - inference efficiency
+authors:
+  - family-names: Dong
+    given-names: Peng
+  - family-names: Liu
+    given-names: Hongbin
+  - family-names: Guo
+    given-names: Xiuyi
+  - family-names: Li
+    given-names: Jilong
+  - family-names: Zhou
+    given-names: Yitong
+  - family-names: Wang
+    given-names: Baoxu
+references:
+  - type: article
+    title: >-
+      Efficient Body-Prior Token Anchoring and Part-Aware Global-Local Fusion
+      for Multi-Scene Person Re-Identification
+    authors:
+      - family-names: Dong
+        given-names: Peng
+      - family-names: Liu
+        given-names: Hongbin
+      - family-names: Guo
+        given-names: Xiuyi
+      - family-names: Li
+        given-names: Jilong
+      - family-names: Zhou
+        given-names: Yitong
+      - family-names: Wang
+        given-names: Baoxu

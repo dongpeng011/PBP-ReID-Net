@@ -1,0 +1,100 @@
+# PBP-ReID -- single-scene regime (Table 2 of the paper)
+#
+#   python train.py --config_file configs/PBP-ReID.yml \
+#       MODEL.DEVICE_ID "('0')" OUTPUT_DIR logs/market1501
+#
+# Every entry can be overridden from the command line, e.g. the ViT-Base
+# reference row of Table 4:
+#   MODEL.HPRA_START 12 MODEL.GAL False
+MODEL:
+  # 'imagenet' initialises the backbone from MODEL.PRETRAIN_PATH; use 'none'
+  # when you train from scratch or when you load a full checkpoint with test.py
+  PRETRAIN_CHOICE: 'imagenet'
+  PRETRAIN_PATH: 'ckpts/vit_base_patch16_224.pth'
+  DEVICE: 'cuda'
+  DEVICE_ID: ('0')
+  NAME: 'pbp_reid'
+  TRANSFORMER_TYPE: 'vit_base_patch16_224_PBPReID'
+  STRIDE_SIZE: [16, 16]
+  DROP_PATH: 0.1
+  DROP_OUT: 0.0
+  ATT_DROP_RATE: 0.0
+
+  # ---- EASA: three coarse bands (head / torso / lower body)
+  PART_NUM: 3
+  # ---- HPRA replaces full-token attention in blocks [6, 12)
+  HPRA_START: 6
+  HPRA_HEADS: 12
+  HPRA_REL_HEADS: 4
+  HPRA_REL_SHARE: True
+  HPRA_REL_NORM: True
+  # ---- GAL: F = GAP(X) + W_f * X_f
+  GAL: True
+
+  # ---- BNNeck head
+  NECK: 'bnneck'
+  COS_LAYER: False
+  IF_WITH_CENTER: 'no'
+  METRIC_LOSS_TYPE: 'triplet'
+  IF_LABELSMOOTH: 'on'
+  NO_MARGIN: False
+  ID_LOSS_WEIGHT: 1.0
+  TRIPLET_LOSS_WEIGHT: 1.0
+
+  # camera / viewpoint side information is not used by PBP-ReID
+  SIE_CAMERA: False
+  SIE_VIEW: False
+  SIE_COE: 3.0
+
+INPUT:
+  # 256 x 128 with 16 x 16 patches -> 16 x 8 = 128 tokens (Section 4.1)
+  SIZE_TRAIN: [256, 128]
+  SIZE_TEST: [256, 128]
+  PROB: 0.5
+  RE_PROB: 0.5
+  PADDING: 10
+  PIXEL_MEAN: [0.485, 0.456, 0.406]
+  PIXEL_STD: [0.229, 0.224, 0.225]
+
+DATASETS:
+  NAMES: ('combine')
+  COMBINE_NAMES: ['market1501']
+  ROOTS: ['data/market1501']
+  # 0 = low resolution, 1 = general, 2 = clothing change, 3 = occlusion, 4 = infrared
+  COMBINE_TYPE: [1]
+  COMBINE_PID: True
+
+DATALOADER:
+  COMBINE_SAMPLER: 'softmax_triplet'
+  SAMPLER: 'softmax_triplet'
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 8
+
+SOLVER:
+  OPTIMIZER_NAME: 'Adam'
+  MAX_EPOCHS: 60
+  BASE_LR: 0.00035
+  MIN_LR: 0.0
+  BIAS_LR_FACTOR: 1
+  MARGIN: 0.3
+  SEED: 1234
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0005
+  WARMUP_EPOCHS: 5
+  WARMUP_FACTOR: 0.01
+  WARMUP_METHOD: 'linear'
+  CHECKPOINT_PERIOD: 10
+  EVAL_PERIOD: 10
+  LOG_PERIOD: 50
+  IMS_PER_BATCH: 64
+
+TEST:
+  EVAL: True
+  IMS_PER_BATCH: 128
+  RE_RANKING: False
+  WEIGHT: ''
+  NECK_FEAT: 'after'
+  FEAT_NORM: 'yes'
+
+OUTPUT_DIR: 'logs/market1501'
+

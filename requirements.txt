@@ -1,0 +1,11 @@
+# Minimal environment for PBP-ReID (verified with the versions in the comments).
+# CUDA 11.7 wheels were used for the experiments reported in the paper.
+
+torch==2.0.0            # 2.0+ recommended: enables fused scaled_dot_product_attention
+torchvision==0.15.1
+timm==0.9.16            # RandomErasing used by the training transform
+numpy>=1.21
+Pillow>=8.2
+PyYAML>=5.4             # config files
+yacs>=0.1.8             # optional: config/cfg_node.py is used when missing
+scipy>=1.6              # re-ranking helper (utils/reranking.py)

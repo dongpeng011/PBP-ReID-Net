@@ -1,0 +1,12 @@
+# Keep shell scripts LF so that they run on Linux servers and in CI.
+*.sh text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Images and archives are binary.
+*.png binary
+*.jpg binary
+*.pdf binary
+*.zip binary
+*.pth binary
