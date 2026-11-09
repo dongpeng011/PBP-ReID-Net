@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the FAQ first
+    url: https://github.com/dongpeng011/PBP-ReID-Net/blob/main/docs/FAQ.md
+    about: Installation, dataset paths, GPU memory and reproducibility questions are answered there.

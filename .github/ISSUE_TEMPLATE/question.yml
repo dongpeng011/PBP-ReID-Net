@@ -1,0 +1,18 @@
+name: Question
+description: Ask about the method, the configuration or the results
+labels: [question]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: Please be as specific as possible, and mention what you already tried.
+    validations:
+      required: true
+  - type: input
+    id: section
+    attributes:
+      label: Related section of the paper or file of the repository
+      placeholder: "e.g. Sec. 3.2 (HPRA), model/modules/hpra.py"
+    validations:
+      required: false

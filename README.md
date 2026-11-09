@@ -9,11 +9,12 @@ Peng Dong · Hongbin Liu · Xiuyi Guo · Jilong Li · Yitong Zhou · Baoxu Wang
 [![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-11.7-76B900?logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)
+[![CI](https://github.com/dongpeng011/PBP-ReID-Net/actions/workflows/ci.yml/badge.svg)](https://github.com/dongpeng011/PBP-ReID-Net/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-MIT-3DA639)](LICENSE)
 [![Journal](https://img.shields.io/badge/Journal-The%20Visual%20Computer-1F6FEB)](https://link.springer.com/journal/371)
 [![Status](https://img.shields.io/badge/Status-Research%20Code-orange)]()
 
-[Method](#-method) · [Results](#-results) · [Quick start](#-quick-start) · [Efficiency](#-efficiency) · [Reproducibility](#-reproducibility-notes) · [Citation](#-citation)
+[Method](#-method) · [Results](#-results) · [Quick start](#-quick-start) · [Tests](#-tests) · [Efficiency](#-efficiency) · [Data & results](docs/RESULTS.md) · [FAQ](docs/FAQ.md) · [Citation](#-citation)
 
 </div>
 
@@ -172,6 +173,22 @@ Every component is a configuration switch — no code change required:
 `MODEL.HPRA_START` is the first block whose full-token attention is replaced by
 HPRA (`6` = blocks 6–11, `12` = none).  `bash/run_ablation.sh` runs all four.
 
+## 🧪 Tests
+
+```bash
+make test        # 22 unit tests, about 20 s on CPU
+make smoke       # end-to-end smoke test, no data and no checkpoint needed
+make compile     # byte-compile every module
+```
+
+The unit tests assert the equations of the paper rather than the shapes only:
+the band partition covers every token exactly once, level 1 of HPRA is identical
+to explicitly running the shared projection and the attention band by band, the
+descriptor equals `GAP(X) + W_f·vec(X_f)` computed by hand, the four ablation
+configurations build, and a ViT-Base checkpoint loads into an HPRA block. The
+same checks run on every push through GitHub Actions
+([`ci.yml`](.github/workflows/ci.yml)).
+
 ## ⚡ Efficiency
 
 Measured with this repository on a single **RTX 3090**, one 256 × 128 crop,
@@ -206,7 +223,8 @@ PBP-ReID-Net/
 ├── utils/                 mAP / CMC / PRCC / SYSU metrics, logger
 ├── tools/                 smoke test, efficiency, synthetic data
 ├── bash/                  example scripts
-├── docs/                  Chinese guide, verification log, figures
+├── docs/                  RESULTS.md, FAQ.md, Chinese guide, figures
+├── tests/                 pytest suite for EASA / HPRA / GAL / model
 ├── train.py  test.py
 └── requirements.txt
 ```
@@ -283,4 +301,4 @@ If you find this repository useful, please also cite those two works.
 
 Released under the [MIT License](LICENSE).
 
-<div align="center"><sub>If this repository is useful for your research, a ⭐ helps others find it.</sub></div>
+<div align="center"><sub>Documentation: <a href="docs/RESULTS.md">results</a> · <a href="docs/FAQ.md">FAQ</a> · <a href="CONTRIBUTING.md">contributing</a> · <a href="CHANGELOG.md">changelog</a><br/>If this repository is useful for your research, a ⭐ helps others find it.</sub></div>

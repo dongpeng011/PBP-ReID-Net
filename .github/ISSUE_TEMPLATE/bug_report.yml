@@ -1,0 +1,51 @@
+name: Bug report
+description: Something does not run, or runs with an unexpected result
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem. Please run
+        `python tools/smoke_test.py` first — it isolates most installation issues.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: The command you ran, the expected behaviour and the actual behaviour.
+      placeholder: |
+        python train.py --config_file configs/PBP-ReID.yml ...
+        expected ...
+        got ...
+    validations:
+      required: true
+  - type: textarea
+    id: traceback
+    attributes:
+      label: Traceback / log
+      description: Paste the complete error message (it will be rendered as code).
+      render: shell
+    validations:
+      required: false
+  - type: input
+    id: smoke
+    attributes:
+      label: Does `python tools/smoke_test.py` pass?
+      placeholder: "yes / no (paste the failing check)"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Output of `python -c "import torch, sys; print(sys.version); print(torch.__version__, torch.version.cuda, torch.cuda.is_available())"`
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: config
+    attributes:
+      label: Configuration
+      description: The config file and the command-line overrides you used.
+      placeholder: configs/PBP-ReID.yml + MODEL.HPRA_START 12
+    validations:
+      required: false
