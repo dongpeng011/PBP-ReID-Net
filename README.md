@@ -47,7 +47,7 @@ Peng Dong · Hongbin Liu · Xiuyi Guo · Jilong Li · Yitong Zhou · Baoxu Wang
 | 🔍 **Cheaper attention** | Inside the last six blocks, full-token self-attention is replaced by attention *within* three body bands: attention-score entries drop from `N²` to `N²/P` (65 % fewer for `P = 3`). |
 | ➕ **No channel expansion** | The part descriptor is **added** to the global one instead of being concatenated, so the identity feature keeps the backbone dimension. |
 | 🎯 **One recipe, many scenes** | The same model and loss cover standard, occluded, low-resolution, visible–infrared and clothing-changing benchmarks, in both the single-scene and the multi-scene training regime. |
-| 🧪 **Tested release** | `tools/smoke_test.py` verifies the band partition, the fusion identity of Eq. (11), all ablations and checkpoint loading; `docs/verification_log.md` records the run. |
+| 🧪 **Tested release** | `tools/smoke_test.py` verifies the band partition, the fusion identity of Eq. (10), all ablations and checkpoint loading; `docs/verification_log.md` records the run. |
 
 ## 🧩 Method
 
@@ -128,7 +128,7 @@ pip install -r requirements.txt
 python tools/smoke_test.py
 ```
 
-Checks the band partition, the algebraic identity of Eq. (11), the four ablation
+Checks the band partition, the algebraic identity of Eq. (10), the four ablation
 configurations and the loading of a ViT-Base checkpoint, then prints
 `all checks passed`.
 
@@ -238,14 +238,14 @@ PBP-ReID-Net/
 Three quantitative statements of the paper are **not** reproduced by this code,
 and are documented here on purpose:
 
-1. **Parameter count.** Eq. (10) uses `W_f ∈ ℝ^{PC×C}` (1.77 M), so the model has
+1. **Parameter count.** Eq. (9) uses `W_f ∈ ℝ^{PC×C}` (1.77 M), so the model has
    88.1 M parameters against 86.3 M for the ViT-Base reference. The 87.3 M of the
    paper corresponds to a `C×C` matrix shared across bands; the difference is
    exactly 0.8 M. The code keeps the `PC×C` form.
-2. **Level-2 projections.** Eq. (8) names separate `W_Q', W_K', W_V'`
+2. **Level-2 projections.** Eq. (7) names separate `W_Q', W_K', W_V'`
    (+14.2 M parameters). The paper's parameter count implies that these are
    shared with level 1, which is the default here; set
-   `MODEL.HPRA_REL_SHARE False` for the literal reading of Eq. (8).
+   `MODEL.HPRA_REL_SHARE False` for the literal reading of Eq. (7).
 3. **FLOPs.** At 128 tokens attention is only ≈2.7 % of a ViT-Base block, so
    replacing 66 % of it in six blocks saves ≈1 % of the total FLOPs
    (22.68 → 22.46 G), not the 16 % listed in Table 4 of the paper. The 65 %

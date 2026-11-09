@@ -3,9 +3,9 @@
 
 The identity descriptor is the *sum* of a global and a part-level term::
 
-    x_g = GAP(X)                                   (9)
-    x_l = Flatten(X_f) W_f + b_f                   (10)
-    F   = x_g + x_l                                (11)
+    x_g = GAP(X)                                   (8)
+    x_l = Flatten(X_f) W_f + b_f                   (9)
+    F   = x_g + x_l                                (10)
 
 Because the two terms live in the same ``C``-dimensional space, the addition
 needs no channel expansion and no fully connected layer after concatenation,
@@ -29,7 +29,7 @@ class GlobalLocalAdditiveFusion(nn.Module):
     part_num : int
         Number of bands ``P``.
     bias : bool
-        Whether to add ``b_f`` (Eq. 10).
+        Whether to add ``b_f`` (Eq. 9).
     """
 
     def __init__(self, dim, part_num=3, bias=True):
@@ -44,7 +44,7 @@ class GlobalLocalAdditiveFusion(nn.Module):
     def forward(self, x_global, x_part):
         """Fuse ``x_global`` ``[B, C]`` with ``x_part`` ``[B, P, C]``.
 
-        ``x_part`` is flattened in band order, so ``W_f`` of Eq. (10) is exactly
+        ``x_part`` is flattened in band order, so ``W_f`` of Eq. (9) is exactly
         the weight matrix of :attr:`proj`.
         """
         if x_part.dim() == 2:

@@ -170,7 +170,7 @@ class PBPReID(nn.Module):
         return x, x_f
 
     def forward(self, x, cam_label=None, view_label=None, return_parts=False):
-        """Return the identity descriptor ``F`` ``[B, C]`` of Eq. (11).
+        """Return the identity descriptor ``F`` ``[B, C]`` of Eq. (10).
 
         With ``return_parts=True`` the band descriptors ``X_f`` are returned as
         well, which is useful for the attention visualisations of Fig. 13.
@@ -188,7 +188,7 @@ class PBPReID(nn.Module):
                 # No HPRA block in this configuration (the "+ GAL only" row of
                 # the ablation): the band descriptors are obtained by pooling
                 # the anchored bands of the final token sequence, which is the
-                # parameter-free half of Eq. (7).
+                # parameter-free half of Eq. (6).
                 bands = self.anchoring.split(tokens[:, 1:])
                 x_f = torch.stack([band.mean(dim=1) for band in bands], dim=1)
             feature = self.gal(x_global, x_f)

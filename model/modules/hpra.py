@@ -14,7 +14,7 @@ EASA (``model/modules/easa.py``):
 * **level 2 (inter-band).**  Each refined band is pooled to a single token
   ``t_i``; a second, tiny attention layer reasons over the ``P`` band
   descriptors and returns ``X_f``.  ``X_f`` is the part-level representation
-  consumed by GAL (Eq. 10) and its cost is negligible because ``P = 3``.
+  consumed by GAL (Eq. 9) and its cost is negligible because ``P = 3``.
 
 The module is a drop-in replacement for :class:`model.vit_utils.Attention`: it
 keeps the ``qkv`` / ``proj`` attribute names so that a public ViT-Base
@@ -45,7 +45,7 @@ class HPRAttention(nn.Module):
     rel_share : bool
         If ``True`` the inter-band attention reuses the projections of level 1
         instead of adding a second set.  Default ``False``, i.e. the separate
-        ``W_Q', W_K', W_V'`` of Eq. (8).
+        ``W_Q', W_K', W_V'`` of Eq. (7).
     rel_norm : bool
         Layer-normalise the band descriptors before level 2.  This only
         stabilises training and adds ``2C`` parameters.
@@ -170,7 +170,7 @@ class HPRAttention(nn.Module):
                 query_bands, key_bands, value_bands, token_bands):
             attended = self._mhsa(band_query, band_key, band_value, self.num_heads,
                                   self.scale, self.attn_drop.p if self.training else 0.0)
-            refined_bands.append(attended + band_tokens)                       # Eq. (6)
+            refined_bands.append(attended + band_tokens)                       # Eq. (5)
 
         x_body = torch.cat(refined_bands, dim=1)
         x_body = self.proj(x_body)
@@ -178,7 +178,7 @@ class HPRAttention(nn.Module):
         x_out = torch.cat([prefix, x_body], dim=1)                # inverse of EASA.split
 
         # ---------------------------------------------------------- level 2
-        # t_i = GAP(X_hat_i)                                       Eq. (7)
+        # t_i = GAP(X_hat_i)                                       Eq. (6)
         descriptors = torch.stack([band.mean(dim=1) for band in refined_bands], dim=1)
         band_tokens = self.norm_rel(descriptors)
 
@@ -195,7 +195,7 @@ class HPRAttention(nn.Module):
                                   self.rel_scale, self.rel_attn_drop.p if self.training else 0.0)
             attended = self.proj_rel(attended)
 
-        x_f = descriptors + self.rel_proj_drop(attended)           # Eq. (8)
+        x_f = descriptors + self.rel_proj_drop(attended)           # Eq. (7)
         return x_out, x_f
 
     def extra_repr(self):
