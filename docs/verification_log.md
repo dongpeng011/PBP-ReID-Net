@@ -1,4 +1,4 @@
-﻿# Verification log
+# Verification log
 
 Environment: Python 3.8.8, torch 2.0.0+cu117, GPU NVIDIA GeForce RTX 3090
 --- 1) compileall ---
